@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal Halo · 同心环工作台</title>
+<link rel="stylesheet" href="hud.css"><script>window.__errs=[];window.addEventListener("error",e=>__errs.push(e.message+" @ "+(e.filename||"").split("/").pop()+":"+e.lineno));</script>
+</head>
+<body>
+<div class="app">
+  <header id="topbar">
+    <div class="brand">Personal Halo</div>
+    <div class="kpi"><span class="k">近期活跃来源</span><strong class="v" id="k0">—</strong></div>
+    <div class="kpi"><span class="k">执行中</span><strong class="v" id="k1">—</strong></div>
+    <div class="kpi"><span class="k">近期会话</span><strong class="v" id="k2">—</strong></div>
+    <div class="kpi"><span class="k">累计输出</span><strong class="v" id="k3">—</strong></div>
+    <div class="kpi speed"><span class="k">速率</span><strong class="v wait" id="speedVal">等待速率采样</strong></div>
+    <div class="header-tools">
+      <span id="connection" class="live-indicator"><i></i>连接中</span>
+      <button type="button" id="menuToggle" aria-haspopup="true" aria-expanded="false" title="打开操作菜单">菜单 ▾</button>
+    </div>
+  </header>
+  <div id="toolsMenu" hidden role="menu" aria-label="操作菜单">
+    <div class="tm-row tm-conn" id="menuConn">连接状态：<span id="menuConnState">—</span> · <span id="perfLine">实测帧率：采样中…</span></div>
+    <div class="tm-row" id="rateLine">来源速率：—</div>
+    <div class="tm-sec">
+      <h4>环管理</h4>
+      <div id="ringManager"><nav id="ringChips" aria-label="来源环定位"></nav></div>
+    </div>
+    <div class="tm-sec tm-actions">
+      <button type="button" id="overviewButton" role="menuitem" title="返回四环总览（恢复自动跟随）">总览</button>
+      <button type="button" id="motionButton" aria-pressed="false" role="menuitem">暂停</button>
+      <button type="button" class="console" role="menuitem" title="打开画面参数（C）">调参</button>
+      <button type="button" id="hudButton" role="menuitem" title="纯光环模式（H）">HUD</button>
+      <button type="button" id="menuFS" role="menuitem">全屏</button>
+    </div>
+    <div class="tm-sec">
+      <h4>数据源（检测器）</h4>
+      <div id="sourcesList" class="tm-src">读取中…</div>
+      <div class="tm-note">添加新应用：在 src/adapters/ 编写适配器（roots 声明数据文件路径、match 匹配、poll 产出信号），注册进 adapters/index.js 即自动发现；详见 audit/ZCode-接手复验-2026-11-10.md §五</div>
+    </div>
+    <div class="tm-sec">
+      <h4>动势预设</h4>
+      <div class="tm-actions">
+        <button type="button" id="menuPresetAgt" role="menuitem">AGT 动势</button>
+        <button type="button" id="menuPresetSmooth" role="menuitem">本机流畅</button>
+      </div>
+      <div class="tm-note">本机流畅降低效果层密度/辉光，参数按实测调整，不预承诺帧率</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stageWrap">
+    <canvas id="stage"></canvas>
+    <div id="staleBanner" class="hidden">连接已断开 · 画面数据已过期（重连中）</div>
+    <div id="emptyNote" class="hidden">全部来源环已隐藏 — 点 ＋环 菜单或来源名称恢复（光场持续流动）</div>
+    <div class="float-status" id="floatStatus">
+      <div class="fs-model" id="fsModel">—</div>
+      <div class="fs-main"><span id="fsTitle">等待本机会话</span><span id="fsOut"></span></div>
+      <div class="fs-sub" id="fsSub"></div>
+    </div>
+    <div class="scene-tag" id="sceneTag">同心多环 · 真实数据</div>
+  </div>
+
+  <section class="panels" id="infoPanels">
+    <div class="p"><h3>实时事件</h3><div class="feed" id="feed"></div><div class="cap">最近工具记录 · 含未关联完成观察</div></div>
+    <div class="p"><h3>粒子流场</h3><canvas id="cAdv"></canvas><div class="btns" id="advBtns"><button type="button" class="on" data-flow-mode="advection">平流</button><button type="button" data-flow-mode="projection">投影</button><button type="button" data-flow-mode="render">渲染</button></div></div>
+    <div class="p"><h3 class="with-actions"><span>实时监管</span><button type="button" id="superviseAuto" class="hidden" title="解除手动锁定，恢复自动监管">恢复自动</button></h3><div id="supervise"></div><div class="cap">自动监管最多两路运行 · 点击主任务锁定</div></div>
+    <div class="p"><h3>来源与上下文</h3><canvas id="cDiff"></canvas><div class="cap">来源连接 · 上下文占用</div></div>
+    <div class="p"><h3><span id="dispatchHeading">主任务</span></h3><div class="agents-list" id="agentsList"></div><div class="cap">点击定位环带卡片</div></div>
+    <div class="p"><h3>任务用量对比</h3><canvas id="cIdx"></canvas><div class="cap">CTX / IN / OUT / CACHE · 相对归一</div></div>
+  </section>
+</div>
+<button id="togglePanels" class="panel-toggle" aria-controls="infoPanels" aria-expanded="true">收起仪器栏 ▾</button>
+<div id="detailFloat" class="hidden"></div>
+<div id="pureHint" class="hidden">纯光环模式 — 按 H 或点击右上角恢复 HUD</div>
+
+<script src="halo-data.js"></script>
+<script src="concentric.js"></script>
+<script src="hud.js"></script>
+<script src="dialogs.js"></script>
+</body>
+</html>

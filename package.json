@@ -1,0 +1,13 @@
+{
+  "name": "personal-halo-collector",
+  "version": "0.2.0",
+  "description": "个人 Agent 光环统一采集器：只读 codex/dsh/zcode/workbuddy 本地记录，protocol 2 HTTP/SSE。HALOFLUX 衍生（经 agent-halo），非商业使用。",
+  "type": "module",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test --test-force-exit"
+  },
+  "engines": { "node": ">=22.15.0" }
+}

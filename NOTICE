@@ -1,0 +1,44 @@
+Personal Halo — 衍生来源与许可声明
+====================================
+
+本目录是"个人 Agent 光环"（personal-halo）的统一采集器，在用户本机只读
+codex / dsh / zcode / workbuddy 四个智能体的本地记录，经 protocol 2 的
+HTTP/SSE 提供会话元数据。仅限个人非商业使用。
+
+衍生来源（PolyForm Noncommercial 1.0.0 链）
+------------------------------------------
+
+1. 视觉与采集骨架的衍生链来自 HALOFLUX：
+
+   HALOFLUX by Ryder191 (RYDER CODE / Ms MAIKEBAIs CAT)
+   https://github.com/Ryder191/haloflux
+
+   * collector 骨架模块（src/signals.js、src/store.js 基础、src/watch.js 基础、
+     src/server.js 基础、src/config.js 基础、src/replay.js、src/util/*.js、
+     src/adapters/dsh.js）逐项复制自 caihao373-star/agent-halo
+     （commit 4a22a69c6ad9）的 collector/，该仓库整体按 PolyForm
+     Noncommercial 1.0.0 授权；本目录按同一许可再衍生，修改点以文件头
+     "Derived from agent-halo" 注释与 docs 说明为准。
+   * C 阶段界面的光环视觉模块将继续经 agent-halo 衍生链复用
+     （wallpaper/js/hf-*.js），并保留各文件原有版权头。
+
+2. Codex 事件解析语义参考 xifengyilieng/agt-command-center
+   （commit f93f53f744dc）的 server.py / telemetry.py / output_rates.py
+   设计，未复制其代码。DSH 增量解码思路参考 ACyCar1o/dsh-hud-haloflux
+   （MIT）与 Ke-wood/dsh-haloflux 的状态运动语义，未复制其宿主依赖代码。
+
+Required Notice（随分发逐字保留）
+--------------------------------
+
+Required Notice: Copyright (c) 2026 Ryder191 (RYDER CODE / Ms MAIKEBAIs CAT) - https://github.com/Ryder191/haloflux
+Required Notice: Noncommercial use only. Any commercial use is strictly prohibited. No commercial licenses are offered.
+
+分发本目录（或其衍生）时必须同时保留本 NOTICE 与随附的 LICENSE
+（PolyForm Noncommercial 1.0.0 全文），并注明 HALOFLUX 出处。
+音乐 sw421k.mp3（The Cynic Project，CC0）不属于本采集器，未随附。
+
+隐私边界
+--------
+
+只读打开来源文件/数据库；不读取用户消息、推理正文、工具输出、凭据、
+provider 配置；标题/项目名/工具名/脱敏后的短目标与步骤名以外一律不采集。
